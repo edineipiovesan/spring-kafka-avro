@@ -1,0 +1,18 @@
+{
+    "type": "record",
+    "name": "MyAvroEvent",
+    "namespace": "com.github.edn.event.kafka",
+    "fields": [
+        {
+            "name": "id",
+            "type": "string", "avro.java.string": "String",
+            "description": "Unique identifier for the event"
+        },
+        {
+            "name": "message",
+            "type": "string", "avro.java.string": "String",
+            "default": "This is a default message",
+            "doc": "A custom message"
+        }
+    ]
+}
