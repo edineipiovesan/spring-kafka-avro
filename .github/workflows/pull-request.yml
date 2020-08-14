@@ -22,12 +22,17 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    # Setup JDK
     - name: Setup Java JDK
       uses: actions/setup-java@v1.4.1
       with:
         # The Java version to make available on the path. Takes a whole or semver Java version, or 1.x syntax (e.g. 1.8 => Java 8.x). Early access versions can be specified in the form of e.g. 14-ea, 14.0.0-ea, or 14.0.0-ea.28
         java-version: 1.8
 
-    # Runs a single command using the runners shell
-    - name: Run tests
-      run: ./gradlew clean test
+    - name: Gradle Command
+      uses: eskatos/gradle-command-action@v1.3.2
+      with:
+        # Path to the Gradle executable
+        gradle-executable: $GITHUB_WORKSPACE/gradlew
+        # Gradle command line arguments, see gradle --help
+        arguments: clean test
