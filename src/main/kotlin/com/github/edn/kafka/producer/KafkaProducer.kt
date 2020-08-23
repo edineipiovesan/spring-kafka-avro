@@ -5,7 +5,7 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
-import com.github.edn.kafka.generator.UuidGenerator
+import com.github.edn.kafka.util.generate
 
 @Component
 class KafkaProducer(private val kafkaTemplate: KafkaTemplate<String, Any>) {
@@ -15,25 +15,22 @@ class KafkaProducer(private val kafkaTemplate: KafkaTemplate<String, Any>) {
     fun createEvent(topic: String, volume: Long, internalMillis: Long): Response {
         logger.info("Starting production for $volume events...")
 
-        val idList = UuidGenerator.generate(volume)
+        val idList = generate(volume)
         idList.parallelStream().forEach { id ->
             if (internalMillis > 0) Thread.sleep(internalMillis)
 
             try {
                 val value = MyAvroEvent()
                 value.id = id
-                value.message = "This is just a message."
+                value.message = "[$id] This is just a message content."
                 val record = ProducerRecord<String, Any>(topic, id, value)
                 kafkaTemplate.send(record)
             } catch (e: Exception) {
-                logger.error("Error; id=$id; exception=${e::class.java}; message=${e.message}")
+                logger.error("[$id] Kafka message delivery error; exception=${e::class.java}; message=${e.message}")
                 e.printStackTrace()
             }
         }
 
-        return Response(
-                id = idList.toList(),
-                topic = topic
-        )
+        return Response(ids = idList.toList(), topic = topic)
     }
 }

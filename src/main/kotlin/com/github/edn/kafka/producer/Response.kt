@@ -6,6 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-data class Response(val id: List<String>,
+data class Response(val ids: List<String>,
                     val topic: String,
-                    val totalProduced: Int = id.size)
+                    val totalProduced: Int = ids.size)
