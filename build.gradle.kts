@@ -46,6 +46,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
     testImplementation("org.springframework.kafka:spring-kafka-test")
+    testImplementation("io.kotest:kotest-assertions-core-jvm:4.2.0")
 }
 
 dependencyManagement {
