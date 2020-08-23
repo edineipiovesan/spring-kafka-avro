@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1.4.1
+        with:
+          java-version: 1.8
+
+      - name: Checkout project
+        uses: actions/checkout@v2
+
+      - name: Build
+        uses: eskatos/gradle-command-action@v1.3.2
+        with:
+          gradle-version: current
+          arguments: clean build -x test
+
+      - name: Test
+        uses: eskatos/gradle-command-action@v1.3.2
+        with:
+          gradle-version: current
+          arguments: test
+
+      - name: Package
+        uses: eskatos/gradle-command-action@v1.3.2
+        with:
+          gradle-version: current
+          arguments: bootJar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: spring-kafka-avro-application
+          path: /home/runner/work/spring-kafka-avro/spring-kafka-avro/build/libs/spring-kafka-avro-*.jar

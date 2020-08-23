@@ -1,9 +1,14 @@
+import com.adarshr.gradle.testlogger.TestLoggerExtension
+import com.adarshr.gradle.testlogger.TestLoggerPlugin
+import com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA
 import com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask
+import org.gradle.api.logging.LogLevel.LIFECYCLE
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version "2.3.1.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
+    id("com.adarshr.test-logger") version "2.1.0"
     kotlin("jvm") version "1.3.72"
     kotlin("plugin.spring") version "1.3.72"
 
@@ -86,4 +91,28 @@ avro {
 
 tasks.named("clean", Delete::class) {
     delete("src/main/java")
+}
+
+/**
+ * Test console output
+ */
+plugins.withType<TestLoggerPlugin> {
+    configure<TestLoggerExtension> {
+        theme = MOCHA
+        showExceptions = true
+        showStackTraces = false
+        showFullStackTraces = false
+        showCauses = true
+        slowThreshold = 5000
+        showSummary = true
+        showSimpleNames = true
+        showPassed = true
+        showSkipped = true
+        showFailed = true
+        showStandardStreams = false
+        showPassedStandardStreams = true
+        showSkippedStandardStreams = true
+        showFailedStandardStreams = true
+        logLevel = LIFECYCLE
+    }
 }
